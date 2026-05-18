@@ -2,11 +2,11 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { ChevronLeft, ChevronRight, Rocket, Sparkles, Zap, Heart, ShoppingCart } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Rocket, Sparkles, Zap, Heart, ShoppingCart, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useCart } from '@/lib/cart-context'
-import { products, formatPrice } from '@/lib/products'
+import { products, formatPrice, type Product } from '@/lib/products'
 
 const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? ''
 const FAVORITES_KEY = 'vpee_favorites'
@@ -44,9 +44,42 @@ function useFavorites() {
   return { favorites, toggle }
 }
 
+function AddButton({ product }: { product: Product }) {
+  const { addItem } = useCart()
+  const [added, setAdded] = useState(false)
+
+  const handleAdd = () => {
+    addItem(product)
+    setAdded(true)
+    setTimeout(() => setAdded(false), 1500)
+  }
+
+  return (
+    <Button
+      onClick={handleAdd}
+      className={`font-semibold neon-glow-sm text-sm transition-all duration-300 ${
+        added
+          ? 'bg-green-500 text-white hover:bg-green-500'
+          : 'bg-[#F3FF00] text-[#0D0D0D] hover:bg-[#D8FF3E]'
+      }`}
+    >
+      {added ? (
+        <>
+          <Check className="h-4 w-4 mr-1" />
+          Agregado
+        </>
+      ) : (
+        <>
+          <ShoppingCart className="h-4 w-4 mr-1" />
+          Agregar
+        </>
+      )}
+    </Button>
+  )
+}
+
 export function NewReleases() {
   const scrollRef = useRef<HTMLDivElement>(null)
-  const { addItem } = useCart()
   const { favorites, toggle } = useFavorites()
 
   const scroll = (direction: 'left' | 'right') => {
@@ -217,13 +250,7 @@ export function NewReleases() {
                           </p>
                         )}
                       </div>
-                      <Button
-                        onClick={() => addItem(product)}
-                        className="bg-[#F3FF00] text-[#0D0D0D] font-semibold hover:bg-[#D8FF3E] neon-glow-sm text-sm"
-                      >
-                        <ShoppingCart className="h-4 w-4 mr-1" />
-                        Agregar
-                      </Button>
+                      <AddButton product={product} />
                     </div>
                   </div>
 
