@@ -6,12 +6,13 @@ import { MapPin, Phone, Mail, Instagram, AlertTriangle } from 'lucide-react'
 
 const navigation = {
   categories: [
-    { name: 'Vaporizadores', href: '/categoria/vaporizadores' },
-    { name: 'Desechables', href: '/categoria/desechables' },
-    { name: 'Bongs', href: '/categoria/bongs' },
-    { name: 'CBD', href: '/categoria/cbd' },
-    { name: 'E-Liquids', href: '/categoria/e-liquids' },
-    { name: 'Accesorios', href: '/categoria/accesorios' },
+    { name: 'Vape Recargable', href: '/categoria/vape-recargable' },
+    { name: 'Vape Desechable', href: '/categoria/desechables' },
+    { name: 'Vape Alternativos', href: '/categoria/vape-alternativos' },
+    { name: 'Pods', href: '/categoria/pods' },
+    { name: 'Líquidos', href: '/categoria/liquidos' },
+    { name: 'Repuestos', href: '/categoria/repuestos' },
+    { name: 'Accesorios 4:20', href: '/categoria/accesorios' },
   ],
   company: [
     { name: 'Sobre Nosotros', href: '/nosotros' },
