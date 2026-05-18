@@ -3,39 +3,41 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
-import { ChevronLeft, ChevronRight, X, Sparkles } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 
+const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? ''
+
 const galleryImages = [
   {
-    src: '/images/products/vape-premium-1.jpg',
-    alt: 'Vaporizador premium con acabado negro mate y acentos neon',
-    title: 'Vaporizadores Elite',
-  },
-  {
-    src: '/images/products/vape-premium-2.jpg',
-    alt: 'Vape desechable con acabado metalico premium',
-    title: 'Desechables Premium',
-  },
-  {
-    src: '/images/products/vape-premium-3.jpg',
-    alt: 'Bong de cristal premium con percoladores',
-    title: 'Cristaleria Artesanal',
-  },
-  {
-    src: '/images/products/vape-premium-4.jpg',
-    alt: 'E-liquids premium en botellas elegantes',
-    title: 'E-Liquids Exclusivos',
-  },
-  {
-    src: '/images/products/vape-premium-5.jpg',
-    alt: 'Mod vape de alta gama con pantalla OLED',
+    src: '/images/new_products/vape-premium-1.webp',
+    alt: 'Mod vaporizador de alta potencia con luz neon verde',
     title: 'Mods de Alta Gama',
   },
   {
-    src: '/images/products/vape-premium-6.jpg',
-    alt: 'Productos CBD premium',
+    src: '/images/new_products/vape-premium-2.webp',
+    alt: 'Pod vape premium con nube de humo azul y rosa',
+    title: 'Pod Systems Premium',
+  },
+  {
+    src: '/images/new_products/vape-premium-3.webp',
+    alt: 'Bong de vidrio con iluminacion LED verde premium',
+    title: 'Cristaleria Artesanal',
+  },
+  {
+    src: '/images/new_products/vape-premium-4.webp',
+    alt: 'Liquidos vape premium sabores exclusivos',
+    title: 'Liquidos Premium',
+  },
+  {
+    src: '/images/new_products/vape-premium-5.webp',
+    alt: 'Box mod avanzado con tanque en marmol azul',
+    title: 'Vaporizadores Elite',
+  },
+  {
+    src: '/images/new_products/vape-premium-6.webp',
+    alt: 'Aceite CBD tinctura premium gummies',
     title: 'CBD Wellness',
   },
 ]
@@ -85,7 +87,7 @@ export function PremiumGallery() {
               className="group relative aspect-square overflow-hidden rounded-2xl bg-[#1A1A1A] border border-[#252525] hover:border-[#F3FF00]/40 transition-all duration-500 futuristic-card"
             >
               <Image
-                src={image.src}
+                src={`${bp}${image.src}`}
                 alt={image.alt}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -123,7 +125,7 @@ export function PremiumGallery() {
                 {/* Image */}
                 <div className="relative aspect-[4/3] w-full">
                   <Image
-                    src={galleryImages[selectedIndex].src}
+                    src={`${bp}${galleryImages[selectedIndex].src}`}
                     alt={galleryImages[selectedIndex].alt}
                     fill
                     className="object-contain"

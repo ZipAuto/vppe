@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Poppins, Inter } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
+import { CartProvider } from '@/lib/cart-context'
 import './globals.css'
 
 const poppins = Poppins({ 
@@ -17,55 +17,68 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Vpee | El Smoke Shop Lider en Zipaquira - Vaporizadores y Mas',
-  description: 'Vpee es el smoke shop especializado en Zipaquira. Encuentra vaporizadores, desechables, bongs, CBD y parafernalia premium. Envio gratis en Zipaquira. Solo +18.',
-  keywords: ['vape', 'vaporizadores', 'smoke shop', 'Zipaquira', 'vaper desechable', 'bongs', 'CBD', 'parafernalia', 'Colombia'],
-  authors: [{ name: 'Vpee' }],
+  title: {
+    default: 'Vpee | Smoke Shop #1 en Zipaquira — Vaporizadores, Desechables, Bongs y CBD',
+    template: '%s | Vpee Smoke Shop Zipaquira',
+  },
+  description: 'Vpee es el smoke shop lider en Zipaquira, Cundinamarca. Vaporizadores, vapes desechables, bongs de cristal, CBD, accesorios y mas. Envio gratis en Zipaquira despues de $50.000. Solo +18.',
+  keywords: [
+    'smoke shop zipaquira', 'vape zipaquira', 'vaporizadores zipaquira',
+    'desechables zipaquira', 'bongs zipaquira', 'CBD zipaquira',
+    'waka vape', 'lost mary', 'priv bar', 'geek vape', 'oxva',
+    'tienda vape cundinamarca', 'smoke shop colombia', 'vpee',
+  ],
+  authors: [{ name: 'Vpee Smoke Shop' }],
   creator: 'Vpee',
   publisher: 'Vpee',
-  robots: 'index, follow',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   openGraph: {
     type: 'website',
     locale: 'es_CO',
-    url: 'https://vpee.co',
-    siteName: 'Vpee',
-    title: 'Vpee | El Smoke Shop Lider en Zipaquira',
-    description: 'El smoke shop mas grande de Zipaquira. Vaporizadores, desechables, bongs, CBD y mas. Solo +18.',
+    url: 'https://ZipAuto.github.io/vppe',
+    siteName: 'Vpee Smoke Shop',
+    title: 'Vpee | Smoke Shop #1 en Zipaquira',
+    description: 'Vaporizadores, desechables, bongs, CBD y accesorios premium. El smoke shop mas completo de Zipaquira. Solo +18.',
     images: [
       {
         url: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/AMXC4851.PNG-errkKFbkn06iPfYnygFYuoWLqDchGf.png',
         width: 1200,
         height: 630,
-        alt: 'Vpee Smoke Shop Zipaquira',
+        alt: 'Vpee Smoke Shop Zipaquira — Vaporizadores y Mas',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vpee | El Smoke Shop Lider en Zipaquira',
-    description: 'El smoke shop mas grande de Zipaquira. Vaporizadores, desechables, bongs, CBD y mas.',
+    title: 'Vpee | Smoke Shop #1 en Zipaquira',
+    description: 'Vaporizadores, desechables, bongs, CBD y accesorios premium. Solo +18.',
     images: ['https://hebbkx1anhila5yf.public.blob.vercel-storage.com/AMXC4851.PNG-errkKFbkn06iPfYnygFYuoWLqDchGf.png'],
+    site: '@vpee_smokeshop',
+    creator: '@vpee_smokeshop',
   },
   alternates: {
-    canonical: 'https://vpee.co',
+    canonical: 'https://ZipAuto.github.io/vppe',
   },
   icons: {
     icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
+      { url: '/vppe/favicon.svg', type: 'image/svg+xml' },
+      { url: '/vppe/favicon.svg', sizes: 'any' },
     ],
-    apple: '/apple-icon.png',
+    shortcut: '/vppe/favicon.svg',
   },
+  verification: {
+    google: '',
+  },
+  category: 'shopping',
 }
 
 export const viewport: Viewport = {
@@ -124,8 +137,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${poppins.variable} ${inter.variable} font-sans antialiased`}>
-        {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        <CartProvider>{children}</CartProvider>
       </body>
     </html>
   )

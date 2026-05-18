@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
@@ -15,39 +15,46 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { products, categories } from '@/lib/products'
-import { Search, SlidersHorizontal, X } from 'lucide-react'
+import { Search, SlidersHorizontal, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'name'
 
 export function CatalogContent() {
   const searchParams = useSearchParams()
-  const initialCategory = searchParams.get('categoria') || 'all'
-  
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory)
-  const [searchQuery, setSearchQuery] = useState('')
+
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    searchParams.get('categoria') || 'all'
+  )
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '')
   const [sortBy, setSortBy] = useState<SortOption>('featured')
-  const [showFilters, setShowFilters] = useState(false)
+  const pillsRef = useRef<HTMLDivElement>(null)
+
+  // Sync filters with URL params reactively
+  useEffect(() => {
+    const cat = searchParams.get('categoria') || 'all'
+    const q = searchParams.get('q') || ''
+    setSelectedCategory(cat)
+    if (q) setSearchQuery(q)
+  }, [searchParams])
 
   const filteredProducts = useMemo(() => {
     let result = [...products]
 
-    // Filter by category
     if (selectedCategory !== 'all') {
       result = result.filter(p => p.categorySlug === selectedCategory)
     }
 
-    // Filter by search
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase()
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim()
       result = result.filter(p =>
         p.name.toLowerCase().includes(query) ||
         p.brand.toLowerCase().includes(query) ||
+        p.category.toLowerCase().includes(query) ||
         p.description.toLowerCase().includes(query)
       )
     }
 
-    // Sort
     switch (sortBy) {
       case 'price-asc':
         result.sort((a, b) => a.price - b.price)
@@ -56,111 +63,154 @@ export function CatalogContent() {
         result.sort((a, b) => b.price - a.price)
         break
       case 'name':
-        result.sort((a, b) => a.name.localeCompare(b.name))
+        result.sort((a, b) => a.name.localeCompare(b.name, 'es'))
         break
       case 'featured':
       default:
-        // Keep original order (featured first)
         result.sort((a, b) => {
-          if (a.badge && !b.badge) return -1
-          if (!a.badge && b.badge) return 1
-          return 0
+          const badgeOrder = { 'Mas Vendido': 0, 'Nuevo': 1, 'Premium': 2, 'Oferta': 3, 'Top': 4 }
+          const aOrder = a.badge ? (badgeOrder[a.badge as keyof typeof badgeOrder] ?? 5) : 99
+          const bOrder = b.badge ? (badgeOrder[b.badge as keyof typeof badgeOrder] ?? 5) : 99
+          return aOrder - bOrder
         })
     }
 
     return result
   }, [selectedCategory, searchQuery, sortBy])
 
+  const scrollPills = (dir: 'left' | 'right') => {
+    pillsRef.current?.scrollBy({ left: dir === 'left' ? -200 : 200, behavior: 'smooth' })
+  }
+
+  const handleCategoryChange = (slug: string) => {
+    setSelectedCategory(slug)
+    setSearchQuery('')
+  }
+
+  const activeCategory = categories.find(c => c.slug === selectedCategory)
+
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[#050B22] pt-24 pb-16">
+      <main className="min-h-screen bg-[#0D0D0D] pt-20 pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
           {/* Page Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl sm:text-4xl font-bold text-[#F7F8FC] mb-2">
+          <div className="pt-6 mb-6">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F7F8FC] mb-1">
               Catalogo <span className="text-[#F3FF00]">Vpee</span>
             </h1>
-            <p className="text-[#D9DDE8]">
-              Explora nuestra coleccion de {products.length}+ productos premium
+            <p className="text-[#8A8A8A] text-sm sm:text-base">
+              {products.length} productos disponibles en tienda
             </p>
           </div>
 
-          {/* Filters Bar */}
-          <div className="flex flex-col lg:flex-row gap-4 mb-8">
-            {/* Search */}
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#D9DDE8]" />
-              <Input
-                type="search"
-                placeholder="Buscar productos..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-[#0B1D5A] border-[#F3FF00]/30 text-[#F7F8FC] placeholder:text-[#D9DDE8]/50 focus:border-[#F3FF00]"
-              />
-              {searchQuery && (
+          {/* Search bar — always full width */}
+          <div className="relative mb-4">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8A8A8A]" />
+            <Input
+              type="search"
+              placeholder="Buscar por nombre, marca o categoria..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 pr-10 h-11 bg-[#1A1A1A] border-[#333] text-[#F7F8FC] placeholder:text-[#555] focus:border-[#F3FF00] rounded-xl text-sm"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#666] hover:text-[#F7F8FC] transition-colors"
+                aria-label="Limpiar búsqueda"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Category pills — scrollable on all screens */}
+          <div className="relative mb-4">
+            {/* Scroll left button (desktop) */}
+            <button
+              onClick={() => scrollPills('left')}
+              className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 z-10 w-7 h-7 items-center justify-center rounded-full bg-[#1A1A1A] border border-[#333] text-[#8A8A8A] hover:text-[#F3FF00] hover:border-[#F3FF00]/40 transition-all"
+              aria-label="Scroll izquierda"
+            >
+              <ChevronLeft className="h-3.5 w-3.5" />
+            </button>
+
+            <div
+              ref={pillsRef}
+              className="flex gap-2 overflow-x-auto scrollbar-none pb-1 sm:px-6"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              <button
+                onClick={() => handleCategoryChange('all')}
+                className={cn(
+                  'flex-none px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200',
+                  selectedCategory === 'all'
+                    ? 'bg-[#F3FF00] text-[#0D0D0D] shadow-lg shadow-[#F3FF00]/20'
+                    : 'bg-[#1A1A1A] text-[#C0C0C0] border border-[#2A2A2A] hover:border-[#F3FF00]/40 hover:text-[#F3FF00]'
+                )}
+              >
+                Todos ({products.length})
+              </button>
+              {categories.map((cat) => (
                 <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#D9DDE8] hover:text-[#F7F8FC]"
+                  key={cat.slug}
+                  onClick={() => handleCategoryChange(cat.slug)}
+                  className={cn(
+                    'flex-none px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200',
+                    selectedCategory === cat.slug
+                      ? 'bg-[#F3FF00] text-[#0D0D0D] shadow-lg shadow-[#F3FF00]/20'
+                      : 'bg-[#1A1A1A] text-[#C0C0C0] border border-[#2A2A2A] hover:border-[#F3FF00]/40 hover:text-[#F3FF00]'
+                  )}
                 >
-                  <X className="h-4 w-4" />
+                  {cat.name} ({cat.productCount})
                 </button>
-              )}
+              ))}
             </div>
 
-            {/* Mobile Filter Toggle */}
-            <Button
-              variant="outline"
-              onClick={() => setShowFilters(!showFilters)}
-              className="lg:hidden border-[#F3FF00]/30 text-[#F7F8FC] hover:bg-[#F3FF00]/10"
+            {/* Scroll right button (desktop) */}
+            <button
+              onClick={() => scrollPills('right')}
+              className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1 z-10 w-7 h-7 items-center justify-center rounded-full bg-[#1A1A1A] border border-[#333] text-[#8A8A8A] hover:text-[#F3FF00] hover:border-[#F3FF00]/40 transition-all"
+              aria-label="Scroll derecha"
             >
-              <SlidersHorizontal className="h-4 w-4 mr-2" />
-              Filtros
-            </Button>
+              <ChevronRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
 
-            {/* Desktop Filters */}
-            <div className={cn(
-              "flex flex-col sm:flex-row gap-4",
-              "lg:flex",
-              showFilters ? "flex" : "hidden lg:flex"
-            )}>
-              {/* Category Filter */}
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-full sm:w-[180px] bg-[#0B1D5A] border-[#F3FF00]/30 text-[#F7F8FC]">
-                  <SelectValue placeholder="Categoria" />
-                </SelectTrigger>
-                <SelectContent className="bg-[#0B1D5A] border-[#F3FF00]/30">
-                  <SelectItem value="all" className="text-[#F7F8FC] focus:bg-[#F3FF00]/20">
-                    Todas las categorias
-                  </SelectItem>
-                  {categories.map((cat) => (
-                    <SelectItem
-                      key={cat.slug}
-                      value={cat.slug}
-                      className="text-[#F7F8FC] focus:bg-[#F3FF00]/20"
-                    >
-                      {cat.name} ({cat.productCount})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          {/* Sort row */}
+          <div className="flex items-center justify-between mb-5 gap-3">
+            {/* Results count */}
+            <p className="text-[#8A8A8A] text-sm flex-1 min-w-0 truncate">
+              <span className="text-[#F7F8FC] font-medium">{filteredProducts.length}</span>
+              {' '}resultado{filteredProducts.length !== 1 ? 's' : ''}
+              {selectedCategory !== 'all' && activeCategory && (
+                <> en <span className="text-[#F3FF00]">{activeCategory.name}</span></>
+              )}
+              {searchQuery && (
+                <> para <span className="text-[#F3FF00]">&ldquo;{searchQuery}&rdquo;</span></>
+              )}
+            </p>
 
-              {/* Sort */}
+            {/* Sort + mobile filter toggle */}
+            <div className="flex items-center gap-2 flex-none">
               <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-                <SelectTrigger className="w-full sm:w-[180px] bg-[#0B1D5A] border-[#F3FF00]/30 text-[#F7F8FC]">
-                  <SelectValue placeholder="Ordenar por" />
+                <SelectTrigger className="w-[140px] sm:w-[180px] h-9 bg-[#1A1A1A] border-[#333] text-[#C0C0C0] text-xs sm:text-sm">
+                  <SlidersHorizontal className="h-3.5 w-3.5 mr-1.5 text-[#666]" />
+                  <SelectValue placeholder="Ordenar" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#0B1D5A] border-[#F3FF00]/30">
-                  <SelectItem value="featured" className="text-[#F7F8FC] focus:bg-[#F3FF00]/20">
+                <SelectContent className="bg-[#1A1A1A] border-[#333] z-50">
+                  <SelectItem value="featured" className="text-[#F7F8FC] focus:bg-[#F3FF00]/20 text-sm">
                     Destacados
                   </SelectItem>
-                  <SelectItem value="price-asc" className="text-[#F7F8FC] focus:bg-[#F3FF00]/20">
+                  <SelectItem value="price-asc" className="text-[#F7F8FC] focus:bg-[#F3FF00]/20 text-sm">
                     Precio: menor a mayor
                   </SelectItem>
-                  <SelectItem value="price-desc" className="text-[#F7F8FC] focus:bg-[#F3FF00]/20">
+                  <SelectItem value="price-desc" className="text-[#F7F8FC] focus:bg-[#F3FF00]/20 text-sm">
                     Precio: mayor a menor
                   </SelectItem>
-                  <SelectItem value="name" className="text-[#F7F8FC] focus:bg-[#F3FF00]/20">
+                  <SelectItem value="name" className="text-[#F7F8FC] focus:bg-[#F3FF00]/20 text-sm">
                     Nombre A-Z
                   </SelectItem>
                 </SelectContent>
@@ -168,70 +218,30 @@ export function CatalogContent() {
             </div>
           </div>
 
-          {/* Category Pills (Desktop) */}
-          <div className="hidden lg:flex flex-wrap gap-2 mb-8">
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium transition-colors",
-                selectedCategory === 'all'
-                  ? "bg-[#F3FF00] text-[#0B1D5A]"
-                  : "bg-[#0B1D5A] text-[#F7F8FC] hover:bg-[#F3FF00]/20"
-              )}
-            >
-              Todos
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat.slug}
-                onClick={() => setSelectedCategory(cat.slug)}
-                className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium transition-colors",
-                  selectedCategory === cat.slug
-                    ? "bg-[#F3FF00] text-[#0B1D5A]"
-                    : "bg-[#0B1D5A] text-[#F7F8FC] hover:bg-[#F3FF00]/20"
-                )}
-              >
-                {cat.name}
-              </button>
-            ))}
-          </div>
-
-          {/* Results Count */}
-          <p className="text-[#D9DDE8] mb-6">
-            Mostrando {filteredProducts.length} producto{filteredProducts.length !== 1 ? 's' : ''}
-            {selectedCategory !== 'all' && (
-              <span> en <span className="text-[#F3FF00]">{categories.find(c => c.slug === selectedCategory)?.name}</span></span>
-            )}
-            {searchQuery && (
-              <span> para &quot;{searchQuery}&quot;</span>
-            )}
-          </p>
-
           {/* Products Grid */}
           {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
               {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
-            <div className="text-center py-16">
-              <div className="w-20 h-20 rounded-full bg-[#0B1D5A] flex items-center justify-center mx-auto mb-4">
-                <Search className="w-10 h-10 text-[#F3FF00]/30" />
+            <div className="text-center py-20">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#1A1A1A] flex items-center justify-center mx-auto mb-4">
+                <Search className="w-8 h-8 sm:w-10 sm:h-10 text-[#F3FF00]/30" />
               </div>
-              <h3 className="text-xl font-semibold text-[#F7F8FC] mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-[#F7F8FC] mb-2">
                 No encontramos productos
               </h3>
-              <p className="text-[#D9DDE8] mb-6">
-                Intenta con otra busqueda o categoria
+              <p className="text-[#8A8A8A] text-sm mb-6 px-4">
+                Intenta con otra busqueda o selecciona una categoria diferente
               </p>
               <Button
                 onClick={() => {
                   setSearchQuery('')
                   setSelectedCategory('all')
                 }}
-                className="bg-[#F3FF00] text-[#0B1D5A] hover:bg-[#D8FF3E]"
+                className="bg-[#F3FF00] text-[#0D0D0D] hover:bg-[#D8FF3E] font-semibold"
               >
                 Ver todos los productos
               </Button>

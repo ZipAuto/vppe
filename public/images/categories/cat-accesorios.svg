@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 560" fill="none">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#141008"/>
+      <stop offset="100%" stop-color="#060401"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#F3FF00" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#F3FF00" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="paper1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f5f0e8"/>
+      <stop offset="50%" stop-color="#fffdf8"/>
+      <stop offset="100%" stop-color="#ebe4d4"/>
+    </linearGradient>
+    <linearGradient id="paper2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e8f5e9"/>
+      <stop offset="50%" stop-color="#f8fff8"/>
+      <stop offset="100%" stop-color="#d4ead5"/>
+    </linearGradient>
+    <filter id="gf"><feGaussianBlur stdDeviation="20"/></filter>
+    <filter id="shadow">
+      <feDropShadow dx="2" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+  <rect width="400" height="560" fill="url(#bg)"/>
+  <ellipse cx="200" cy="280" rx="160" ry="160" fill="url(#glow)" filter="url(#gf)"/>
+
+  <!-- ROLLING PAPERS FAN spread -->
+  <!-- Back papers (darker, spread wide) -->
+  <g filter="url(#shadow)">
+    <rect x="135" y="140" width="72" height="200" rx="6" fill="#c8b89a" transform="rotate(-28 171 240)"/>
+    <rect x="155" y="130" width="72" height="200" rx="6" fill="#d4c4a8" transform="rotate(-16 191 230)"/>
+    <!-- Main center paper (most visible) -->
+    <rect x="170" y="125" width="72" height="210" rx="6" fill="url(#paper1)" transform="rotate(-2 206 230)"/>
+    <!-- Right papers -->
+    <rect x="185" y="130" width="72" height="200" rx="6" fill="#d4e8d5" transform="rotate(12 221 230)"/>
+    <rect x="195" y="140" width="72" height="200" rx="6" fill="#c0d8c2" transform="rotate(24 231 240)"/>
+  </g>
+
+  <!-- Detail on center paper -->
+  <g transform="rotate(-2 206 230)">
+    <!-- Paper lines/texture -->
+    <rect x="173" y="175" width="66" height="0.8" rx="0.4" fill="#ddd4c0"/>
+    <rect x="173" y="185" width="66" height="0.8" rx="0.4" fill="#ddd4c0"/>
+    <rect x="173" y="195" width="66" height="0.8" rx="0.4" fill="#ddd4c0"/>
+    <rect x="173" y="205" width="66" height="0.8" rx="0.4" fill="#ddd4c0"/>
+    <rect x="173" y="215" width="66" height="0.8" rx="0.4" fill="#ddd4c0"/>
+    <rect x="173" y="225" width="66" height="0.8" rx="0.4" fill="#ddd4c0"/>
+    <rect x="173" y="235" width="66" height="0.8" rx="0.4" fill="#ddd4c0"/>
+    <rect x="173" y="245" width="66" height="0.8" rx="0.4" fill="#ddd4c0"/>
+    <!-- Gum line (sticky strip) at top -->
+    <rect x="173" y="130" width="66" height="22" rx="5" fill="#F3FF00" fill-opacity="0.35"/>
+    <text x="206" y="145" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#5a4a00" font-weight="bold">NATURAL</text>
+    <!-- Brand logo on paper -->
+    <text x="206" y="168" text-anchor="middle" font-family="serif" font-size="12" fill="#8a7050" font-weight="bold" font-style="italic">RAW</text>
+  </g>
+
+  <!-- Filter tips block at bottom -->
+  <rect x="148" y="365" width="104" height="70" rx="6" fill="#f5e8d0" filter="url(#shadow)"/>
+  <rect x="152" y="369" width="96" height="62" rx="4" fill="#fdf5e8" stroke="#ddd" stroke-width="0.5"/>
+  <!-- Filter tip cross lines pattern -->
+  <line x1="152" y1="390" x2="248" y2="390" stroke="#e0d0b8" stroke-width="0.5"/>
+  <line x1="152" y1="410" x2="248" y2="410" stroke="#e0d0b8" stroke-width="0.5"/>
+  <line x1="152" y1="430" x2="248" y2="430" stroke="#e0d0b8" stroke-width="0.5"/>
+  <line x1="172" y1="369" x2="172" y2="431" stroke="#e0d0b8" stroke-width="0.5"/>
+  <line x1="192" y1="369" x2="192" y2="431" stroke="#e0d0b8" stroke-width="0.5"/>
+  <line x1="212" y1="369" x2="212" y2="431" stroke="#e0d0b8" stroke-width="0.5"/>
+  <line x1="232" y1="369" x2="232" y2="431" stroke="#e0d0b8" stroke-width="0.5"/>
+  <!-- OCB text on filter -->
+  <text x="200" y="402" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#888" font-weight="bold">OCB</text>
+  <text x="200" y="418" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#aaa">FILTER TIPS</text>
+
+  <!-- Lighter (Clipper style) in corner -->
+  <rect x="280" y="330" width="40" height="70" rx="10" fill="#e63946" filter="url(#shadow)"/>
+  <rect x="283" y="333" width="10" height="64" rx="5" fill="white" fill-opacity="0.18"/>
+  <rect x="284" y="365" width="32" height="18" rx="4" fill="#c0192b"/>
+  <ellipse cx="300" cy="332" rx="10" ry="5" fill="#d0d0d0"/>
+  <rect x="296" y="320" width="8" height="14" rx="3" fill="#bbb"/>
+  <circle cx="300" cy="320" r="4" fill="#F3FF00" fill-opacity="0.8"/>
+
+  <!-- Grinder in back-left -->
+  <ellipse cx="108" cy="340" rx="38" ry="8" fill="#333"/>
+  <rect x="74" y="295" width="68" height="48" rx="14" fill="#3a3a3a" filter="url(#shadow)"/>
+  <rect x="78" y="299" width="10" height="40" rx="5" fill="white" fill-opacity="0.1"/>
+  <ellipse cx="108" cy="295" rx="34" ry="7" fill="#555"/>
+
+  <!-- Yellow accent dot cluster -->
+  <circle cx="315" cy="200" r="3.5" fill="#F3FF00" fill-opacity="0.6"/>
+  <circle cx="325" cy="210" r="2" fill="#F3FF00" fill-opacity="0.4"/>
+  <circle cx="308" cy="215" r="1.5" fill="#F3FF00" fill-opacity="0.3"/>
+  <circle cx="85" cy="220" r="2" fill="white" fill-opacity="0.25"/>
+</svg>

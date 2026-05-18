@@ -38,9 +38,9 @@ const contactInfo = [
 ]
 
 const schedule = [
-  { day: 'Lunes - Viernes', hours: '10:00 AM - 8:00 PM' },
-  { day: 'Sabado', hours: '10:00 AM - 8:00 PM' },
-  { day: 'Domingo', hours: 'Cerrado' },
+  { day: 'Compras por la página', hours: '24 horas' },
+  { day: 'Lunes a Sábado', hours: '10:30 AM - 7:30 PM' },
+  { day: 'Domingos', hours: '10:30 AM - 5:00 PM' },
 ]
 
 export function ContactContent() {

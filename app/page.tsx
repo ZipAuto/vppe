@@ -17,6 +17,7 @@ import { Footer } from '@/components/footer'
 import { AgeVerificationModal } from '@/components/age-verification-modal'
 import { WhatsAppButton } from '@/components/whatsapp-button'
 import { CartProvider } from '@/lib/cart-context'
+import { InstagramButton } from '@/components/instagram-button'
 
 function HomeContent() {
   const [isVerified, setIsVerified] = useState(false)
@@ -31,7 +32,7 @@ function HomeContent() {
     setIsLoading(false)
   }, [])
 
-  const handleVerified = (idNumber: string) => {
+  const handleVerified = (_idNumber: string) => {
     setIsVerified(true)
     // Track verification event (for analytics)
     if (typeof window !== 'undefined' && window.gtag) {
@@ -61,9 +62,9 @@ function HomeContent() {
       {/* Main Content - Always rendered for SEO, just visually blocked */}
       <div className={!isVerified ? 'blur-sm pointer-events-none' : ''}>
         <Header />
-        <PromoSlider />
         <main>
           <HeroSection />
+          <PromoSlider />
           <CategorySlider />
           <NewReleases />
           <FeaturedProducts />
@@ -76,6 +77,7 @@ function HomeContent() {
         </main>
         <Footer />
         <WhatsAppButton />
+        <InstagramButton />
       </div>
     </>
   )

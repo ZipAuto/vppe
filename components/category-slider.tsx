@@ -1,133 +1,70 @@
 'use client'
 
-import { useRef } from 'react'
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight, Zap, Cigarette, Wind, Droplets, FlaskConical, Wrench } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { categories, getProductsByCategory, formatPrice } from '@/lib/products'
+import Image from 'next/image'
+import { categories } from '@/lib/products'
 
-const categoryIcons: Record<string, typeof Zap> = {
-  vaporizadores: Zap,
-  desechables: Cigarette,
-  bongs: Wind,
-  cbd: Droplets,
-  'e-liquids': FlaskConical,
-  accesorios: Wrench,
-}
+const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? ''
 
 export function CategorySlider() {
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const scrollAmount = 340
-      scrollRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth',
-      })
-    }
-  }
-
   return (
     <section className="py-16 bg-[#0D0D0D]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F8FC] mb-2">
-              Explora por <span className="text-[#F3FF00]">Categoria</span>
-            </h2>
-            <p className="text-[#8A8A8A]">Encuentra exactamente lo que buscas</p>
-          </div>
-          
-          <div className="hidden sm:flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => scroll('left')}
-              className="border-[#333333] text-[#F7F8FC] hover:border-[#F3FF00] hover:text-[#F3FF00] hover:bg-[#F3FF00]/10"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => scroll('right')}
-              className="border-[#333333] text-[#F7F8FC] hover:border-[#F3FF00] hover:text-[#F3FF00] hover:bg-[#F3FF00]/10"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </Button>
-          </div>
+        <div className="text-center mb-10">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#F7F8FC] mb-2">
+            Explora por <span className="text-[#F3FF00]">Categoria</span>
+          </h2>
+          <p className="text-[#8A8A8A]">Encuentra exactamente lo que buscas</p>
         </div>
 
-        {/* Slider */}
-        <div
-          ref={scrollRef}
-          className="flex gap-5 overflow-x-auto pb-4 category-slider snap-x snap-mandatory"
-          style={{ scrollbarWidth: 'thin' }}
-        >
-          {categories.map((category) => {
-            const Icon = categoryIcons[category.slug] || Zap
-            const categoryProducts = getProductsByCategory(category.slug).slice(0, 3)
-            
-            return (
-              <Link
-                key={category.slug}
-                href={`/categoria/${category.slug}`}
-                className="flex-shrink-0 w-[300px] snap-start group"
-              >
-                <div className="bg-[#1A1A1A] rounded-2xl border border-[#252525] overflow-hidden hover:border-[#F3FF00]/40 transition-all duration-300 futuristic-card">
-                  {/* Category Header */}
-                  <div className="p-5 border-b border-[#252525]">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-[#F3FF00]/10 flex items-center justify-center group-hover:bg-[#F3FF00] transition-colors">
-                        <Icon className="h-6 w-6 text-[#F3FF00] group-hover:text-[#0D0D0D] transition-colors" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-[#F7F8FC] group-hover:text-[#F3FF00] transition-colors">
-                          {category.name}
-                        </h3>
-                        <p className="text-sm text-[#8A8A8A]">
-                          {category.productCount} productos
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+        {/* Grid sin scrollbar */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+          {categories.map((category) => (
+            <Link
+              key={category.slug}
+              href={`/categoria/${category.slug}`}
+              className="group relative aspect-[3/4] rounded-2xl overflow-hidden"
+            >
+              {/* Background image */}
+              <div className="absolute inset-0 bg-[#111111]">
+                {category.image && (
+                  <Image
+                    src={`${bp}${category.image}`}
+                    alt={category.name}
+                    fill
+                    className="object-cover opacity-70 group-hover:opacity-95 group-hover:scale-110 transition-all duration-500"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                  />
+                )}
+              </div>
 
-                  {/* Product Preview */}
-                  <div className="p-4 space-y-3">
-                    {categoryProducts.map((product) => (
-                      <div
-                        key={product.id}
-                        className="flex items-center gap-3 p-2 rounded-lg bg-[#252525]/50"
-                      >
-                        <div className="w-10 h-10 rounded-lg bg-[#333333] flex items-center justify-center flex-shrink-0">
-                          <span className="text-xs font-bold text-[#F3FF00]">
-                            {product.name.charAt(0)}
-                          </span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-[#F7F8FC] truncate">
-                            {product.name}
-                          </p>
-                          <p className="text-xs text-[#F3FF00]">
-                            {formatPrice(product.price)}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+              {/* Dark overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D] via-[#0D0D0D]/40 to-transparent group-hover:from-[#0D0D0D]/95 transition-all duration-300" />
 
-                  {/* CTA */}
-                  <div className="p-4 pt-0">
-                    <div className="w-full py-2.5 rounded-lg bg-[#252525] text-center text-sm font-medium text-[#8A8A8A] group-hover:bg-[#F3FF00] group-hover:text-[#0D0D0D] transition-colors">
-                      Ver todos los productos
-                    </div>
-                  </div>
+              {/* Border glow */}
+              <div className="absolute inset-0 rounded-2xl border border-[#222] group-hover:border-[#F3FF00]/50 transition-colors duration-300" />
+
+              {/* Content */}
+              <div className="absolute bottom-0 left-0 right-0 p-4">
+                <h3 className="font-bold text-[#F7F8FC] group-hover:text-[#F3FF00] transition-colors text-sm sm:text-base leading-tight">
+                  {category.name}
+                </h3>
+                <p className="text-xs text-[#8A8A8A] mt-0.5">
+                  {category.productCount} productos
+                </p>
+                <div className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[#F3FF00] opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-1 group-hover:translate-y-0">
+                  Ver todos
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </div>
-              </Link>
-            )
-          })}
+              </div>
+
+              {/* Top accent */}
+              <div className="absolute top-3 right-3 w-6 h-6 border-t-2 border-r-2 border-[#F3FF00]/0 group-hover:border-[#F3FF00]/70 rounded-tr-lg transition-colors duration-300" />
+            </Link>
+          ))}
         </div>
       </div>
     </section>

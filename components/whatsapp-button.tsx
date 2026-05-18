@@ -4,49 +4,39 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { X, MessageCircle } from 'lucide-react'
 
+const quickMessages = [
+  {
+    label: 'Consultar producto',
+    message: 'Hola Vpee! Quiero informacion sobre un producto.',
+  },
+  {
+    label: 'Estado de mi pedido',
+    message: 'Hola Vpee! Quiero consultar el estado de mi pedido.',
+  },
+  {
+    label: 'Asesoria personalizada',
+    message: 'Hola Vpee! Necesito asesoria para elegir un vaporizador.',
+  },
+]
+
+function waLink(message: string) {
+  return `https://wa.me/573016522125?text=${encodeURIComponent(message)}`
+}
+
 export function WhatsAppButton() {
   const [isExpanded, setIsExpanded] = useState(false)
-
-  const quickMessages = [
-    {
-      label: 'Consultar producto',
-      message: 'Hola Vpee! Quiero informacion sobre un producto.',
-    },
-    {
-      label: 'Estado de mi pedido',
-      message: 'Hola Vpee! Quiero consultar el estado de mi pedido.',
-    },
-    {
-      label: 'Asesoria personalizada',
-      message: 'Hola Vpee! Necesito asesoria para elegir un vaporizador.',
-    },
-  ]
-
-  const handleWhatsAppClick = (message: string) => {
-    const userId = localStorage.getItem('vpee_user_id') || ''
-    const fullMessage = userId 
-      ? `${message}\n\nMi ID de verificacion: ${userId}`
-      : message
-    
-    window.open(
-      `https://wa.me/573016522125?text=${encodeURIComponent(fullMessage)}`,
-      '_blank',
-      'noopener,noreferrer'
-    )
-    setIsExpanded(false)
-  }
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {/* Quick Messages Panel */}
       <div
         className={cn(
-          "absolute bottom-16 right-0 w-72 rounded-xl overflow-hidden",
-          "bg-[#0B1D5A] border border-[#F3FF00]/20 shadow-2xl",
-          "transition-all duration-300 transform origin-bottom-right",
-          isExpanded 
-            ? "opacity-100 scale-100 translate-y-0" 
-            : "opacity-0 scale-95 translate-y-4 pointer-events-none"
+          'absolute bottom-16 right-0 w-72 rounded-2xl overflow-hidden',
+          'bg-[#1A1A1A] border border-[#333333] shadow-2xl',
+          'transition-all duration-300 transform origin-bottom-right',
+          isExpanded
+            ? 'opacity-100 scale-100 translate-y-0'
+            : 'opacity-0 scale-95 translate-y-4 pointer-events-none'
         )}
       >
         {/* Header */}
@@ -58,7 +48,7 @@ export function WhatsAppButton() {
               </svg>
             </div>
             <div>
-              <h3 className="font-semibold text-white">Vpee</h3>
+              <h3 className="font-semibold text-white">Vpee Smoke Shop</h3>
               <p className="text-xs text-white/80">Normalmente responde en minutos</p>
             </div>
           </div>
@@ -66,29 +56,35 @@ export function WhatsAppButton() {
 
         {/* Body */}
         <div className="p-4">
-          <p className="text-sm text-[#D9DDE8] mb-4">
+          <p className="text-sm text-[#8A8A8A] mb-4">
             Hola! Como podemos ayudarte hoy?
           </p>
-          
+
           <div className="space-y-2">
             {quickMessages.map((item) => (
-              <button
+              <a
                 key={item.label}
-                onClick={() => handleWhatsAppClick(item.message)}
-                className="w-full text-left px-4 py-3 rounded-lg bg-[#050B22] text-[#F7F8FC] text-sm hover:bg-[#F3FF00]/10 hover:text-[#F3FF00] transition-colors"
+                href={waLink(item.message)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsExpanded(false)}
+                className="block w-full text-left px-4 py-3 rounded-xl bg-[#0D0D0D] border border-[#2A2A2A] text-[#F7F8FC] text-sm hover:border-[#25D366]/50 hover:bg-[#25D366]/10 hover:text-[#25D366] transition-all"
               >
                 {item.label}
-              </button>
+              </a>
             ))}
           </div>
 
-          <button
-            onClick={() => handleWhatsAppClick('Hola Vpee!')}
-            className="w-full mt-4 py-3 bg-[#25D366] text-white font-semibold rounded-lg hover:bg-[#22c55e] transition-colors flex items-center justify-center gap-2"
+          <a
+            href={waLink('Hola Vpee!')}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsExpanded(false)}
+            className="mt-4 w-full py-3 bg-[#25D366] text-white font-semibold rounded-xl hover:bg-[#22c55e] transition-colors flex items-center justify-center gap-2"
           >
             <MessageCircle className="w-5 h-5" />
             Iniciar conversacion
-          </button>
+          </a>
         </div>
       </div>
 
@@ -96,11 +92,11 @@ export function WhatsAppButton() {
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         className={cn(
-          "w-14 h-14 rounded-full shadow-lg flex items-center justify-center",
-          "transition-all duration-300 hover:scale-110",
-          isExpanded 
-            ? "bg-[#0B1D5A] border border-[#F3FF00]/30" 
-            : "bg-[#25D366]"
+          'w-14 h-14 rounded-full shadow-lg flex items-center justify-center',
+          'transition-all duration-300 hover:scale-110',
+          isExpanded
+            ? 'bg-[#1A1A1A] border border-[#333333]'
+            : 'bg-[#25D366]'
         )}
         aria-label={isExpanded ? 'Cerrar chat' : 'Abrir WhatsApp'}
       >
@@ -115,7 +111,7 @@ export function WhatsAppButton() {
 
       {/* Pulse animation when closed */}
       {!isExpanded && (
-        <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-25" />
+        <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-25 pointer-events-none" />
       )}
     </div>
   )

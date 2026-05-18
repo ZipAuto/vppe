@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -179,13 +180,13 @@ export function AgeVerificationModal({ onVerified }: AgeVerificationModalProps) 
         {/* Legal Notice */}
         <p className="mt-6 text-xs text-center text-[#8A8A8A]/60 leading-relaxed">
           Al continuar, confirmas que tienes 18 anos o mas y aceptas nuestra{' '}
-          <a href="/politica-privacidad" className="text-[#F3FF00] hover:underline">
+          <Link href="/politica-privacidad" className="text-[#F3FF00] hover:underline">
             Politica de Privacidad
-          </a>{' '}
+          </Link>{' '}
           y{' '}
-          <a href="/terminos" className="text-[#F3FF00] hover:underline">
+          <Link href="/terminos" className="text-[#F3FF00] hover:underline">
             Terminos y Condiciones
-          </a>.
+          </Link>.
         </p>
       </div>
     </div>

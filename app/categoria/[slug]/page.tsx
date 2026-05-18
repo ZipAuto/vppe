@@ -51,7 +51,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[#050B22] pt-24 pb-16">
+      <main className="min-h-screen bg-[#0D0D0D] pt-24 pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm mb-8" aria-label="Breadcrumb">
@@ -90,7 +90,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
           ) : (
             <div className="text-center py-16">
-              <div className="w-20 h-20 rounded-full bg-[#0B1D5A] flex items-center justify-center mx-auto mb-4">
+              <div className="w-20 h-20 rounded-full bg-[#1A1A1A] flex items-center justify-center mx-auto mb-4">
                 <span className="text-4xl text-[#F3FF00]/30">0</span>
               </div>
               <h3 className="text-xl font-semibold text-[#F7F8FC] mb-2">
@@ -120,7 +120,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   <Link
                     key={cat.slug}
                     href={`/categoria/${cat.slug}`}
-                    className="px-4 py-2 rounded-full bg-[#0B1D5A] text-[#F7F8FC] hover:bg-[#F3FF00]/20 hover:text-[#F3FF00] transition-colors"
+                    className="px-4 py-2 rounded-full bg-[#1A1A1A] text-[#F7F8FC] hover:bg-[#F3FF00]/20 hover:text-[#F3FF00] transition-colors"
                   >
                     {cat.name}
                   </Link>
