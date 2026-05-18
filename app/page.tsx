@@ -16,7 +16,6 @@ import { WhyChooseUs } from '@/components/why-choose-us'
 import { Footer } from '@/components/footer'
 import { AgeVerificationModal } from '@/components/age-verification-modal'
 import { WhatsAppButton } from '@/components/whatsapp-button'
-import { CartProvider } from '@/lib/cart-context'
 import { InstagramButton } from '@/components/instagram-button'
 
 function HomeContent() {
@@ -84,11 +83,7 @@ function HomeContent() {
 }
 
 export default function Home() {
-  return (
-    <CartProvider>
-      <HomeContent />
-    </CartProvider>
-  )
+  return <HomeContent />
 }
 
 // Extend Window interface for gtag

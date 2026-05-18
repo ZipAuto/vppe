@@ -2,11 +2,11 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { ChevronLeft, ChevronRight, Rocket, Sparkles, Zap, Heart, ShoppingCart, Check } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Rocket, Sparkles, Zap, Heart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { useCart } from '@/lib/cart-context'
-import { products, formatPrice, type Product } from '@/lib/products'
+import { products, formatPrice } from '@/lib/products'
+import { AddToCartButton } from '@/components/add-to-cart-button'
 
 const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? ''
 const FAVORITES_KEY = 'vpee_favorites'
@@ -44,40 +44,6 @@ function useFavorites() {
   return { favorites, toggle }
 }
 
-function AddButton({ product }: { product: Product }) {
-  const { addItem } = useCart()
-  const [added, setAdded] = useState(false)
-
-  const handleAdd = () => {
-    addItem(product)
-    setAdded(true)
-    setTimeout(() => setAdded(false), 1500)
-  }
-
-  return (
-    <Button
-      onClick={handleAdd}
-      className={`font-semibold neon-glow-sm text-sm transition-all duration-300 ${
-        added
-          ? 'bg-green-500 text-white hover:bg-green-500'
-          : 'bg-[#F3FF00] text-[#0D0D0D] hover:bg-[#D8FF3E]'
-      }`}
-    >
-      {added ? (
-        <>
-          <Check className="h-4 w-4 mr-1" />
-          Agregado
-        </>
-      ) : (
-        <>
-          <ShoppingCart className="h-4 w-4 mr-1" />
-          Agregar
-        </>
-      )}
-    </Button>
-  )
-}
-
 export function NewReleases() {
   const scrollRef = useRef<HTMLDivElement>(null)
   const { favorites, toggle } = useFavorites()
@@ -95,7 +61,6 @@ export function NewReleases() {
 
   return (
     <section className="py-20 relative overflow-hidden">
-      {/* Futuristic Background */}
       <div className="absolute inset-0 bg-[#0D0D0D]">
         <div
           className="absolute inset-0 opacity-[0.03]"
@@ -132,20 +97,12 @@ export function NewReleases() {
           </div>
 
           <div className="hidden md:flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => scroll('left')}
-              className="border-[#F3FF00]/30 text-[#F3FF00] hover:bg-[#F3FF00] hover:text-[#0D0D0D] hover:border-[#F3FF00]"
-            >
+            <Button variant="outline" size="icon" onClick={() => scroll('left')}
+              className="border-[#F3FF00]/30 text-[#F3FF00] hover:bg-[#F3FF00] hover:text-[#0D0D0D] hover:border-[#F3FF00]">
               <ChevronLeft className="h-5 w-5" />
             </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => scroll('right')}
-              className="border-[#F3FF00]/30 text-[#F3FF00] hover:bg-[#F3FF00] hover:text-[#0D0D0D] hover:border-[#F3FF00]"
-            >
+            <Button variant="outline" size="icon" onClick={() => scroll('right')}
+              className="border-[#F3FF00]/30 text-[#F3FF00] hover:bg-[#F3FF00] hover:text-[#0D0D0D] hover:border-[#F3FF00]">
               <ChevronRight className="h-5 w-5" />
             </Button>
           </div>
@@ -160,17 +117,13 @@ export function NewReleases() {
           {newReleases.map((product, index) => {
             const isFav = favorites.has(product.id)
             return (
-              <div
-                key={product.id}
-                className="flex-shrink-0 w-[300px] sm:w-[340px] snap-start group"
-              >
+              <div key={product.id} className="flex-shrink-0 w-[300px] sm:w-[340px] snap-start group">
                 <div className="relative bg-gradient-to-b from-[#1A1A1A] to-[#0D0D0D] rounded-3xl border border-[#252525] overflow-hidden hover:border-[#F3FF00]/60 transition-all duration-500 futuristic-card h-full">
-                  {/* Glow Effect on Hover */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <div className="absolute inset-0 bg-gradient-to-t from-[#F3FF00]/10 via-transparent to-transparent" />
                   </div>
 
-                  {/* Badges row */}
+                  {/* Badges */}
                   <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
                     <Badge className="bg-[#F3FF00] text-[#0D0D0D] font-bold px-3 py-1 hover:bg-[#F3FF00]">
                       <Sparkles className="h-3 w-3 mr-1" />
@@ -184,7 +137,7 @@ export function NewReleases() {
                     )}
                   </div>
 
-                  {/* Favorite button */}
+                  {/* Favorite */}
                   <button
                     onClick={() => toggle(product.id)}
                     aria-label={isFav ? 'Quitar de favoritos' : 'Agregar a favoritos'}
@@ -197,7 +150,7 @@ export function NewReleases() {
                     <Heart className={`h-4 w-4 ${isFav ? 'fill-current' : ''}`} />
                   </button>
 
-                  {/* Product Visual */}
+                  {/* Image */}
                   <div className="relative h-52 bg-white overflow-hidden">
                     {product.image ? (
                       <Image
@@ -220,41 +173,28 @@ export function NewReleases() {
 
                   {/* Content */}
                   <div className="p-5 pt-3">
-                    <p className="text-xs font-medium text-[#F3FF00] tracking-wider uppercase mb-1">
-                      {product.brand}
-                    </p>
+                    <p className="text-xs font-medium text-[#F3FF00] tracking-wider uppercase mb-1">{product.brand}</p>
                     <h3 className="text-lg font-bold text-[#F7F8FC] group-hover:text-[#F3FF00] transition-colors mb-2 line-clamp-1">
                       {product.name}
                     </h3>
-
                     <div className="flex flex-wrap gap-1.5 mb-4">
                       {product.features.slice(0, 3).map((feature, i) => (
-                        <span
-                          key={i}
-                          className="text-xs px-2 py-1 rounded-full bg-[#252525] text-[#8A8A8A]"
-                        >
+                        <span key={i} className="text-xs px-2 py-1 rounded-full bg-[#252525] text-[#8A8A8A]">
                           {feature}
                         </span>
                       ))}
                     </div>
-
-                    {/* Price & CTA */}
                     <div className="flex items-center justify-between pt-4 border-t border-[#252525]">
                       <div>
-                        <p className="text-xl font-bold text-[#F3FF00]">
-                          {formatPrice(product.price)}
-                        </p>
+                        <p className="text-xl font-bold text-[#F3FF00]">{formatPrice(product.price)}</p>
                         {product.originalPrice && (
-                          <p className="text-sm text-[#8A8A8A] line-through">
-                            {formatPrice(product.originalPrice)}
-                          </p>
+                          <p className="text-sm text-[#8A8A8A] line-through">{formatPrice(product.originalPrice)}</p>
                         )}
                       </div>
-                      <AddButton product={product} />
+                      <AddToCartButton product={product} size="sm" />
                     </div>
                   </div>
 
-                  {/* Corner accent */}
                   <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden pointer-events-none">
                     <div className="absolute -right-8 -top-8 w-16 h-16 bg-[#F3FF00]/5 rounded-full group-hover:bg-[#F3FF00]/10 transition-colors" />
                   </div>
@@ -264,7 +204,6 @@ export function NewReleases() {
           })}
         </div>
 
-        {/* Favorites hint */}
         {favCount === 0 && (
           <p className="text-center text-xs text-[#555] mt-2">
             Toca el <Heart className="inline h-3 w-3" /> para guardar tus favoritos y recibir recomendaciones personalizadas

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ShoppingCart, Zap } from 'lucide-react'
+import { ShoppingCart, Zap, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Product, formatPrice } from '@/lib/products'
 import { useCart } from '@/lib/cart-context'
@@ -29,6 +29,13 @@ function generateWhatsAppLink(product: Product): string {
 export function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart()
   const [modalOpen, setModalOpen] = useState(false)
+  const [added, setAdded] = useState(false)
+
+  const handleAdd = () => {
+    addItem(product)
+    setAdded(true)
+    setTimeout(() => setAdded(false), 1500)
+  }
 
   return (
     <>
@@ -140,11 +147,15 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.inStock && (
             <Button
               size="sm"
-              onClick={() => addItem(product)}
-              className="h-8 w-8 p-0 bg-[#1A1A1A] border border-[#333] text-[#F3FF00] hover:bg-[#F3FF00] hover:text-[#0D0D0D] hover:border-[#F3FF00] transition-all"
+              onClick={handleAdd}
+              className={`h-8 w-8 p-0 border transition-all ${
+                added
+                  ? 'bg-green-500 border-green-500 text-white hover:bg-green-500'
+                  : 'bg-[#1A1A1A] border-[#333] text-[#F3FF00] hover:bg-[#F3FF00] hover:text-[#0D0D0D] hover:border-[#F3FF00]'
+              }`}
               aria-label={`Agregar ${product.name} al carrito`}
             >
-              <ShoppingCart className="h-4 w-4" />
+              {added ? <Check className="h-4 w-4" /> : <ShoppingCart className="h-4 w-4" />}
             </Button>
           )}
         </div>

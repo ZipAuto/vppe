@@ -4,13 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ShoppingCart, ArrowRight, Zap } from 'lucide-react'
+import { ArrowRight, Zap } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useCart } from '@/lib/cart-context'
-import { products, formatPrice, Product } from '@/lib/products'
+import { products, formatPrice, type Product } from '@/lib/products'
+import { AddToCartButton } from '@/components/add-to-cart-button'
 
-// Featured: todos los productos con badge, hasta 12
-const featuredProducts = products.filter(p => p.badge).slice(0, 12)
+const featuredProducts = products.filter(p => p.badge && p.inStock).slice(0, 12)
 const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? ''
 
 function generateWhatsAppLink(product: Product): string {
@@ -21,12 +20,9 @@ function generateWhatsAppLink(product: Product): string {
 }
 
 export function FeaturedProducts() {
-  const { addItem } = useCart()
-
   return (
     <section className="py-20 bg-gradient-to-b from-[#0D0D0D] to-[#1A1A1A]/30">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
           <div>
             <h2 className="text-3xl sm:text-4xl font-bold text-[#F7F8FC] mb-2">
@@ -36,11 +32,8 @@ export function FeaturedProducts() {
               Los favoritos de nuestros clientes. Calidad garantizada y envio rapido.
             </p>
           </div>
-          <Button
-            asChild
-            variant="outline"
-            className="border-[#F3FF00]/30 text-[#F3FF00] hover:bg-[#F3FF00]/10 hover:border-[#F3FF00]"
-          >
+          <Button asChild variant="outline"
+            className="border-[#F3FF00]/30 text-[#F3FF00] hover:bg-[#F3FF00]/10 hover:border-[#F3FF00]">
             <Link href="/catalogo">
               Ver todo el catalogo
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -48,7 +41,6 @@ export function FeaturedProducts() {
           </Button>
         </div>
 
-        {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {featuredProducts.map((product) => (
             <article
@@ -59,7 +51,6 @@ export function FeaturedProducts() {
                 'hover:border-[#F3FF00]/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(243,255,0,0.08)]'
               )}
             >
-              {/* Image */}
               <div className="relative aspect-square bg-white overflow-hidden">
                 {product.image ? (
                   <Image
@@ -71,38 +62,30 @@ export function FeaturedProducts() {
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-20 h-20 rounded-full bg-[#F3FF00]/5 flex items-center justify-center">
-                      <span className="text-3xl font-bold text-[#F3FF00]/40">
-                        {product.name.charAt(0)}
-                      </span>
-                    </div>
+                    <span className="text-3xl font-bold text-[#F3FF00]/40">{product.name.charAt(0)}</span>
                   </div>
                 )}
 
-                {/* Badge */}
                 {product.badge && (
-                  <Badge
-                    className={cn(
-                      'absolute top-3 left-3 font-semibold text-xs',
-                      product.badge === 'Oferta' && 'bg-red-500 text-white hover:bg-red-500',
-                      product.badge === 'Nuevo' && 'bg-[#F3FF00] text-[#0D0D0D] hover:bg-[#F3FF00]',
-                      product.badge === 'Mas Vendido' && 'bg-[#F3FF00] text-[#0D0D0D] hover:bg-[#F3FF00]',
-                      product.badge === 'Premium' && 'bg-gradient-to-r from-amber-500 to-yellow-400 text-black hover:from-amber-500',
-                      product.badge === 'Top' && 'bg-[#F3FF00] text-[#0D0D0D] hover:bg-[#F3FF00]'
-                    )}
-                  >
+                  <Badge className={cn(
+                    'absolute top-3 left-3 font-semibold text-xs',
+                    product.badge === 'Oferta' && 'bg-red-500 text-white hover:bg-red-500',
+                    product.badge === 'Nuevo' && 'bg-[#F3FF00] text-[#0D0D0D] hover:bg-[#F3FF00]',
+                    product.badge === 'Mas Vendido' && 'bg-[#F3FF00] text-[#0D0D0D] hover:bg-[#F3FF00]',
+                    product.badge === 'Premium' && 'bg-gradient-to-r from-amber-500 to-yellow-400 text-black hover:from-amber-500',
+                    product.badge === 'Top' && 'bg-[#F3FF00] text-[#0D0D0D] hover:bg-[#F3FF00]'
+                  )}>
                     {product.badge}
                   </Badge>
                 )}
 
-                {/* Puffs */}
                 {product.puffs && (
                   <span className="absolute top-3 right-3 px-2 py-1 text-xs font-bold bg-[#0D0D0D]/90 text-[#F3FF00] rounded-full border border-[#F3FF00]/20">
                     {product.puffs} puffs
                   </span>
                 )}
 
-                {/* Hover overlay: dos botones */}
+                {/* Hover overlay */}
                 <div className="absolute inset-0 bg-[#0D0D0D]/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2 px-4">
                   <a
                     href={generateWhatsAppLink(product)}
@@ -114,17 +97,10 @@ export function FeaturedProducts() {
                     <Zap className="h-4 w-4" />
                     Comprar ahora
                   </a>
-                  <button
-                    onClick={() => addItem(product)}
-                    className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 bg-[#1A1A1A] border border-[#F3FF00]/40 text-[#F3FF00] font-semibold rounded-lg hover:bg-[#F3FF00]/10 transition-colors text-sm"
-                  >
-                    <ShoppingCart className="h-4 w-4" />
-                    Agregar al carrito
-                  </button>
+                  <AddToCartButton product={product} size="sm" className="w-full justify-center" />
                 </div>
               </div>
 
-              {/* Content */}
               <div className="p-4 flex flex-col flex-1">
                 <span className="text-xs font-medium text-[#F3FF00]/70 uppercase tracking-wider">
                   {product.category}
@@ -134,24 +110,12 @@ export function FeaturedProducts() {
                 </h3>
                 <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#1E1E1E]">
                   <div>
-                    <span className="text-base font-bold text-[#F3FF00]">
-                      {formatPrice(product.price)}
-                    </span>
+                    <span className="text-base font-bold text-[#F3FF00]">{formatPrice(product.price)}</span>
                     {product.originalPrice && (
-                      <span className="block text-xs text-[#555] line-through">
-                        {formatPrice(product.originalPrice)}
-                      </span>
+                      <span className="block text-xs text-[#555] line-through">{formatPrice(product.originalPrice)}</span>
                     )}
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => addItem(product)}
-                    className="h-8 w-8 text-[#8A8A8A] hover:text-[#F3FF00] hover:bg-[#F3FF00]/10"
-                    aria-label={`Agregar ${product.name} al carrito`}
-                  >
-                    <ShoppingCart className="h-4 w-4" />
-                  </Button>
+                  <AddToCartButton product={product} size="sm" />
                 </div>
               </div>
             </article>
