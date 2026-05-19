@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 560" fill="none">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#1a1a1a"/>
+      <stop offset="100%" stop-color="#050505"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F3FF00" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#F3FF00" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="body" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2a2a2a"/>
+      <stop offset="40%" stop-color="#f0f0f0"/>
+      <stop offset="60%" stop-color="#c8c8c8"/>
+      <stop offset="100%" stop-color="#1a1a1a"/>
+    </linearGradient>
+    <linearGradient id="cap" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F3FF00" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#F3FF00"/>
+      <stop offset="100%" stop-color="#b8bf00" stop-opacity="0.8"/>
+    </linearGradient>
+    <filter id="gf">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="drop">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#F3FF00" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="400" height="560" fill="url(#bg)"/>
+  <ellipse cx="200" cy="220" rx="120" ry="180" fill="url(#glow)" filter="url(#gf)"/>
+  <!-- Vape body: slim tall cylinder -->
+  <rect x="168" y="100" width="64" height="340" rx="32" fill="url(#body)" filter="url(#drop)"/>
+  <!-- Highlight stripe -->
+  <rect x="185" y="110" width="8" height="320" rx="4" fill="white" fill-opacity="0.35"/>
+  <!-- Top cap (mouthpiece) -->
+  <rect x="178" y="80" width="44" height="30" rx="12" fill="url(#cap)" filter="url(#drop)"/>
+  <rect x="192" y="84" width="6" height="22" rx="3" fill="white" fill-opacity="0.4"/>
+  <!-- LED indicator -->
+  <ellipse cx="200" cy="420" rx="8" ry="8" fill="#F3FF00" filter="url(#drop)"/>
+  <ellipse cx="200" cy="420" rx="5" ry="5" fill="white" fill-opacity="0.6"/>
+  <!-- Brand stripe -->
+  <rect x="168" y="290" width="64" height="3" rx="1.5" fill="#F3FF00" fill-opacity="0.5"/>
+  <!-- Micro detail lines -->
+  <rect x="172" y="305" width="56" height="1.5" rx="0.75" fill="#F3FF00" fill-opacity="0.2"/>
+  <rect x="172" y="312" width="56" height="1.5" rx="0.75" fill="#F3FF00" fill-opacity="0.2"/>
+  <!-- Shine particle top -->
+  <circle cx="245" cy="130" r="3" fill="#F3FF00" fill-opacity="0.7"/>
+  <circle cx="155" cy="180" r="2" fill="#F3FF00" fill-opacity="0.5"/>
+  <circle cx="258" cy="280" r="1.5" fill="white" fill-opacity="0.4"/>
+</svg>

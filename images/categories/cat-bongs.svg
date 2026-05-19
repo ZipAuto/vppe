@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 560" fill="none">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#0a1420"/>
+      <stop offset="100%" stop-color="#030810"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="60%" r="45%">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="glass" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00bcd4" stop-opacity="0.15"/>
+      <stop offset="30%" stop-color="#00e5ff" stop-opacity="0.5"/>
+      <stop offset="60%" stop-color="#b2ebf2" stop-opacity="0.6"/>
+      <stop offset="80%" stop-color="#00e5ff" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#006064" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0097a7" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#006064" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="base" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00bcd4" stop-opacity="0.1"/>
+      <stop offset="50%" stop-color="#80deea" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#00838f" stop-opacity="0.1"/>
+    </linearGradient>
+    <filter id="gf"><feGaussianBlur stdDeviation="22"/></filter>
+    <filter id="gfsoft"><feGaussianBlur stdDeviation="4"/></filter>
+    <filter id="glow2">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <rect width="400" height="560" fill="url(#bg)"/>
+  <ellipse cx="200" cy="340" rx="140" ry="130" fill="url(#glow)" filter="url(#gf)"/>
+
+  <!-- BONG STRUCTURE -->
+  <!-- Wide base chamber -->
+  <ellipse cx="200" cy="430" rx="90" ry="18" fill="url(#base)" stroke="#00e5ff" stroke-width="0.8" stroke-opacity="0.4"/>
+  <rect x="118" y="290" width="164" height="145" rx="50" fill="url(#glass)" stroke="#00e5ff" stroke-width="1" stroke-opacity="0.5"/>
+  <!-- Water inside base -->
+  <rect x="126" y="380" width="148" height="48" rx="40" fill="url(#water)"/>
+  <!-- Water surface ripple -->
+  <ellipse cx="200" cy="380" rx="74" ry="6" fill="#00e5ff" fill-opacity="0.15"/>
+  <ellipse cx="200" cy="380" rx="50" ry="3" fill="#00e5ff" fill-opacity="0.1"/>
+  <!-- Bubbles in water -->
+  <circle cx="168" cy="400" r="5" fill="#00e5ff" fill-opacity="0.2" stroke="#00e5ff" stroke-width="0.5" stroke-opacity="0.4"/>
+  <circle cx="220" cy="408" r="3.5" fill="#00e5ff" fill-opacity="0.15" stroke="#00e5ff" stroke-width="0.5" stroke-opacity="0.3"/>
+  <circle cx="185" cy="415" r="2.5" fill="#00e5ff" fill-opacity="0.2"/>
+  <circle cx="240" cy="395" r="4" fill="#00e5ff" fill-opacity="0.12"/>
+  <!-- Chamber highlight -->
+  <rect x="124" y="300" width="14" height="120" rx="7" fill="white" fill-opacity="0.12"/>
+
+  <!-- Neck / tube -->
+  <rect x="183" y="100" width="34" height="200" rx="17" fill="url(#glass)" stroke="#00e5ff" stroke-width="1" stroke-opacity="0.5"/>
+  <!-- Neck highlight -->
+  <rect x="187" y="108" width="8" height="184" rx="4" fill="white" fill-opacity="0.2"/>
+  <!-- Ice catch notch -->
+  <rect x="178" y="200" width="44" height="8" rx="4" fill="#00e5ff" fill-opacity="0.15" stroke="#00e5ff" stroke-width="0.8" stroke-opacity="0.4"/>
+
+  <!-- Mouthpiece top rim -->
+  <ellipse cx="200" cy="100" rx="22" ry="7" fill="url(#glass)" stroke="#00e5ff" stroke-width="1" stroke-opacity="0.6"/>
+  <!-- Smoke/vapor wisps from mouthpiece -->
+  <path d="M192 88 Q188 70 196 55 Q204 40 200 28" stroke="white" stroke-width="2" stroke-opacity="0.12" stroke-linecap="round" fill="none"/>
+  <path d="M200 85 Q206 66 202 50 Q198 35 205 22" stroke="white" stroke-width="1.5" stroke-opacity="0.08" stroke-linecap="round" fill="none"/>
+  <path d="M207 90 Q214 72 208 56" stroke="white" stroke-width="1" stroke-opacity="0.08" stroke-linecap="round" fill="none"/>
+
+  <!-- Downstem / side arm -->
+  <rect x="246" y="340" width="14" height="72" rx="7" fill="url(#glass)" stroke="#00e5ff" stroke-width="0.8" stroke-opacity="0.4" transform="rotate(-42 200 350)"/>
+  <!-- Bowl at end of downstem -->
+  <ellipse cx="285" cy="292" rx="18" ry="10" fill="url(#glass)" stroke="#00e5ff" stroke-width="1" stroke-opacity="0.5"/>
+  <ellipse cx="285" cy="290" rx="10" ry="6" fill="#3a1a00" fill-opacity="0.6"/>
+  <ellipse cx="285" cy="289" rx="6" ry="4" fill="#F3FF00" fill-opacity="0.15"/>
+
+  <!-- Percolator line inside chamber -->
+  <line x1="138" y1="360" x2="262" y2="360" stroke="#00e5ff" stroke-width="0.5" stroke-opacity="0.2" stroke-dasharray="4 4"/>
+
+  <!-- Yellow accent glow on base -->
+  <ellipse cx="200" cy="445" rx="70" ry="8" fill="#F3FF00" fill-opacity="0.04"/>
+  <ellipse cx="200" cy="448" rx="50" ry="5" fill="#F3FF00" fill-opacity="0.03"/>
+
+  <!-- Ambient particles -->
+  <circle cx="130" cy="200" r="2" fill="#00e5ff" fill-opacity="0.5"/>
+  <circle cx="295" cy="250" r="1.5" fill="#00e5ff" fill-opacity="0.4"/>
+  <circle cx="310" cy="380" r="2.5" fill="#00e5ff" fill-opacity="0.3"/>
+  <circle cx="100" cy="320" r="1.5" fill="white" fill-opacity="0.2"/>
+</svg>
