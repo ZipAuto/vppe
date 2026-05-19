@@ -8,18 +8,9 @@ import { Badge } from '@/components/ui/badge'
 import { Product, formatPrice } from '@/lib/products'
 import { useCart } from '@/lib/cart-context'
 import { cn } from '@/lib/utils'
+import { generateWhatsAppLink } from '@/lib/whatsapp'
 
 const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? ''
-
-function generateWhatsAppLink(product: Product): string {
-  const message = encodeURIComponent(
-    `Hola Vpee! Quiero comprar:\n` +
-    `Producto: ${product.name}\n` +
-    `SKU: ${product.sku}\n` +
-    `Valor: ${formatPrice(product.price)}`
-  )
-  return `https://wa.me/573016522125?text=${message}`
-}
 
 interface ProductModalProps {
   product: Product

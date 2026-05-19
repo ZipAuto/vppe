@@ -9,21 +9,12 @@ import { cn } from '@/lib/utils'
 import { Product, formatPrice } from '@/lib/products'
 import { useCart } from '@/lib/cart-context'
 import { ProductModal } from '@/components/product-modal'
+import { generateWhatsAppLink } from '@/lib/whatsapp'
 
 const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? ''
 
 interface ProductCardProps {
   product: Product
-}
-
-function generateWhatsAppLink(product: Product): string {
-  const message = encodeURIComponent(
-    `Hola Vpee! Quiero comprar:\n` +
-    `Producto: ${product.name}\n` +
-    `SKU: ${product.sku}\n` +
-    `Valor: ${formatPrice(product.price)}`
-  )
-  return `https://wa.me/573016522125?text=${message}`
 }
 
 export function ProductCard({ product }: ProductCardProps) {

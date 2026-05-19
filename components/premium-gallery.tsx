@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { ChevronLeft, ChevronRight, Sparkles, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -245,13 +246,13 @@ export function PremiumGallery() {
                   </div>
 
                   {/* CTA */}
-                  <a
+                  <Link
                     href="/catalogo"
                     className="mt-8 inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#F3FF00] text-[#0D0D0D] font-bold rounded-xl hover:bg-[#D8FF3E] transition-colors text-sm"
                   >
                     <Sparkles className="h-4 w-4" />
                     Ver productos premium en catálogo
-                  </a>
+                  </Link>
                 </div>
               </div>
             )}
